@@ -76,10 +76,9 @@ agg_congestion_stream = extract_congestion.groupBy("area_name", "ppltn_time").ag
 
 )
 
-
 # 결과 출력
 query = agg_congestion_stream.writeStream \
-    .outputMode("complete") \
+    .outputMode("complate") \
     .format("console") \
     .start()
 

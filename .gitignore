@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 .vscode
 config/setting.conf
+test.py
