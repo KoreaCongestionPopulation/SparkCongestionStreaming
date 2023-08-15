@@ -122,17 +122,18 @@ age_congestion_specific_schema = StructField(
 |    seoul congestion  schema register      |    
 ---------------------------------------------
 """
+
 # 예측값 제공 안할때  fcst_yn: "n"
-n_fcst_yn = StructField("fcst_yn", StringType())
+n_fcst_yn = StructField("fcst_yn", StringType(), True)
 
 # common + fcst_yn_schema + age_rate
 y_age_congestion_scheme = StructType(
-    common_schema.fields + [fcst_yn_schema, age_congestion_specific_schema]
+    common_schema.fields + fcst_yn_schema.fields + [age_congestion_specific_schema]
 )
 
 # common + fcst_yn_schema + gender_rate
-y_gender_congestion_schema = StringType(
-    common_schema.fields + [fcst_yn_schema, gender_rate_schema]
+y_gender_congestion_schema = StructType(
+    common_schema.fields + fcst_yn_schema.fields + [gender_rate_schema]
 )
 
 # common + fcst_yn_schema("n") + age_rate
@@ -141,6 +142,6 @@ n_age_congestion_scheme = StructType(
 )
 
 # common + fcst_yn_schema("n") + gender_rate
-n_gender_congestion_schema = StringType(
+n_gender_congestion_schema = StructType(
     common_schema.fields + [n_fcst_yn, gender_rate_schema]
 )
