@@ -5,19 +5,20 @@ from properties import (
     PALACE_AND_CULTURAL_HERITAGE_NOT_FCST_GENDER,
     DEVELOPED_MARKET_NOT_FCST_GENDER,
     TOURIST_SPECIAL_ZONE_NOT_FCST_GENDER,
-    PARK_NOT_FCST_AGE,
+    PARK_NOT_FCST_GENDER,
     POPULATED_AREA_NOT_FCST_GENDER
 )
 
 topic_list = [
     POPULATED_AREA_NOT_FCST_GENDER, 
-    PARK_NOT_FCST_AGE, 
+    PARK_NOT_FCST_GENDER, 
     TOURIST_SPECIAL_ZONE_NOT_FCST_GENDER, 
     DEVELOPED_MARKET_NOT_FCST_GENDER, 
     PALACE_AND_CULTURAL_HERITAGE_NOT_FCST_GENDER
 ]
 
 """
+
 {
   "area_name": "광화문·덕수궁",
   "area_congestion_lvl": 2,
@@ -52,13 +53,15 @@ kafka_connection = (
 average_congestion = (
     kafka_connection
     .select(
-        from_json(col("value").cast("strgin"), n_gender_congestion_schema).alias("congestion")
+        from_json(col("value").cast("string"), n_gender_congestion_schema).alias("congestion")
     )
 )
 
 # 평균 계산을 위한 필드 추출
 agg_data = average_congestion.select(
     col("congestion.area_name").alias("area_name"),
+    col("congestion.ppltn_time").alias("ppltn_time"),
+    col("congestion.area_congestion_lvl").alias("area_congestion_lvl"),
     col("congestion.area_ppltn_min").alias("area_ppltn_min"),
     col("congestion.area_ppltn_max").alias("area_ppltn_max"),
     col("congestion.gender_rate.male_ppltn_rate").alias("male_ppltn_rate"),
@@ -66,7 +69,8 @@ agg_data = average_congestion.select(
 )
 
 # area_name 기준으로 평균 계산
-aggregatedStream = agg_data.groupBy("area_name").agg(
+aggregatedStream = agg_data.groupBy("area_name", "ppltn_time").agg(
+    avg("area_congestion_lvl").alias("avg_congestion_lvl"),
     avg("area_ppltn_min").alias("avg_area_ppltn_min"),
     avg("area_ppltn_max").alias("avg_area_ppltn_max"),
     avg("male_ppltn_rate").alias("avg_male_ppltn_rate"),
