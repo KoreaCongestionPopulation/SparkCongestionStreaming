@@ -56,29 +56,29 @@ average_congestion = (
         from_json(col("value").cast("string"), n_gender_congestion_schema).alias("congestion")
     )
 )
-
-# 평균 계산을 위한 필드 추출
-agg_data = average_congestion.select(
+extract_congestion = average_congestion.select(
     col("congestion.area_name").alias("area_name"),
     col("congestion.ppltn_time").alias("ppltn_time"),
     col("congestion.area_congestion_lvl").alias("area_congestion_lvl"),
     col("congestion.area_ppltn_min").alias("area_ppltn_min"),
     col("congestion.area_ppltn_max").alias("area_ppltn_max"),
     col("congestion.gender_rate.male_ppltn_rate").alias("male_ppltn_rate"),
-    col("congestion.gender_rate.female_ppltn_rate").alias("female_ppltn_rate")
+    col("congestion.gender_rate.female_ppltn_rate").alias("female_ppltn_rate"),
+
 )
 
-# area_name 기준으로 평균 계산
-aggregatedStream = agg_data.groupBy("area_name", "ppltn_time").agg(
+agg_congestion_stream = extract_congestion.groupBy("area_name", "ppltn_time").agg(
     avg("area_congestion_lvl").alias("avg_congestion_lvl"),
-    avg("area_ppltn_min").alias("avg_area_ppltn_min"),
-    avg("area_ppltn_max").alias("avg_area_ppltn_max"),
+    avg("area_ppltn_min").alias("avg_ppltn_min"),
+    avg("area_ppltn_max").alias("avg_ppltn_max"),
     avg("male_ppltn_rate").alias("avg_male_ppltn_rate"),
-    avg("female_ppltn_rate").alias("avg_female_ppltn_rate")
+    avg("female_ppltn_rate").alias("avg_female_ppltn_rate"),
+
 )
+
 
 # 결과 출력
-query = aggregatedStream.writeStream \
+query = agg_congestion_stream.writeStream \
     .outputMode("complete") \
     .format("console") \
     .start()
