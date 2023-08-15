@@ -1,40 +1,15 @@
 from schema.congestion_type import (
     n_gender_congestion_schema, n_age_congestion_scheme
 )
+from schema.topic_list import (
+    n_age_topic_list, 
+    age_retrive_topic_list,
+    n_gender_topic_list,
+    gender_retrive_topic_list
+)
 from common_connection import average_query
 from concurrent.futures import ThreadPoolExecutor
 
-from properties import (
-    PALACE_AND_CULTURAL_HERITAGE_NOT_FCST_GENDER,
-    DEVELOPED_MARKET_NOT_FCST_GENDER,
-    TOURIST_SPECIAL_ZONE_NOT_FCST_GENDER,
-    PARK_NOT_FCST_GENDER,
-    POPULATED_AREA_NOT_FCST_GENDER
-
-)
-from properties import (
-    PALACE_AND_CULTURAL_HERITAGE_NOT_FCST_AGE,
-    DEVELOPED_MARKET_NOT_FCST_AGE,
-    TOURIST_SPECIAL_ZONE_NOT_FCST_AGE,
-    PARK_NOT_FCST_AGE,
-    POPULATED_AREA_NOT_FCST_AGE
-)
-
-
-age_topic_list = [
-    PALACE_AND_CULTURAL_HERITAGE_NOT_FCST_AGE,
-    DEVELOPED_MARKET_NOT_FCST_AGE,
-    TOURIST_SPECIAL_ZONE_NOT_FCST_AGE,
-    PARK_NOT_FCST_AGE,
-    POPULATED_AREA_NOT_FCST_AGE
-]
-gender_topic_list = [
-    POPULATED_AREA_NOT_FCST_GENDER, 
-    PARK_NOT_FCST_GENDER, 
-    TOURIST_SPECIAL_ZONE_NOT_FCST_GENDER, 
-    DEVELOPED_MARKET_NOT_FCST_GENDER, 
-    PALACE_AND_CULTURAL_HERITAGE_NOT_FCST_GENDER
-]
 
 # 일단 임시
 def sql_for_congestion(fields: str) -> str:
@@ -49,41 +24,53 @@ def sql_for_congestion(fields: str) -> str:
     
     return f"""
     SELECT 
-        cg.congestion.area_name,
-        cg.congestion.ppltn_time,
-        AVG(cg.congestion.area_congestion_lvl) as avg_congestion_lvl,
-        AVG(cg.congestion.area_ppltn_min) as avg_ppltn_min,
-        AVG(cg.congestion.area_ppltn_max) as avg_ppltn_max,
+        cg.area_name,
+        cg.ppltn_time,
+        AVG(cg.area_congestion_lvl) as avg_congestion_lvl,
+        AVG(cg.area_ppltn_min) as avg_ppltn_min,
+        AVG(cg.area_ppltn_max) as avg_ppltn_max,
         {fields}
     FROM 
         congestion_data as cg
     GROUP BY
-        cg.congestion.area_name, cg.congestion.ppltn_time
+        cg.area_name, cg.ppltn_time
     """
 
 
 gender_rate = """
-    AVG(cg.congestion.gender_rate.male_ppltn_rate) as avg_male_ppltn_rate,
-    AVG(cg.congestion.gender_rate.female_ppltn_rate) as avg_female_ppltn_rate
+    AVG(cg.gender_rate.male_ppltn_rate) as avg_male_ppltn_rate,
+    AVG(cg.gender_rate.female_ppltn_rate) as avg_female_ppltn_rate
 """
 
 age_rate = """
-    AVG(cg.congestion.age_congestion_specific.ppltn_rate_0) as avg_ppltn_rate_0,
-    AVG(cg.congestion.age_congestion_specific.ppltn_rate_10) as avg_ppltn_rate_10,
-    AVG(cg.congestion.age_congestion_specific.ppltn_rate_20) as avg_ppltn_rate_20,
-    AVG(cg.congestion.age_congestion_specific.ppltn_rate_30) as avg_ppltn_rate_30,
-    AVG(cg.congestion.age_congestion_specific.ppltn_rate_40) as avg_ppltn_rate_40,
-    AVG(cg.congestion.age_congestion_specific.ppltn_rate_50) as avg_ppltn_rate_50,
-    AVG(cg.congestion.age_congestion_specific.ppltn_rate_60) as avg_ppltn_rate_60,
-    AVG(cg.congestion.age_congestion_specific.ppltn_rate_70) as avg_ppltn_rate_70
+    AVG(cg.age_congestion_specific.ppltn_rate_0) as avg_ppltn_rate_0,
+    AVG(cg.age_congestion_specific.ppltn_rate_10) as avg_ppltn_rate_10,
+    AVG(cg.age_congestion_specific.ppltn_rate_20) as avg_ppltn_rate_20,
+    AVG(cg.age_congestion_specific.ppltn_rate_30) as avg_ppltn_rate_30,
+    AVG(cg.age_congestion_specific.ppltn_rate_40) as avg_ppltn_rate_40,
+    AVG(cg.age_congestion_specific.ppltn_rate_50) as avg_ppltn_rate_50,
+    AVG(cg.age_congestion_specific.ppltn_rate_60) as avg_ppltn_rate_60,
+    AVG(cg.age_congestion_specific.ppltn_rate_70) as avg_ppltn_rate_70
 
 """
 
-age = sql_for_congestion(age_rate)
-gender = sql_for_congestion(gender_rate)
+age_qs = sql_for_congestion(age_rate)
+gender_qs = sql_for_congestion(gender_rate)
 with ThreadPoolExecutor(max_workers=2) as executor:
-    executor.submit(average_query, gender_topic_list, n_gender_congestion_schema, gender)
-    executor.submit(average_query, age_topic_list, n_age_congestion_scheme, age)
+    executor.submit(
+        average_query, 
+        n_gender_topic_list, 
+        n_gender_congestion_schema, 
+        gender_qs,
+        gender_retrive_topic_list
+    )
+    # executor.submit(
+    #     average_query, 
+    #     n_age_topic_list, 
+    #     n_age_congestion_scheme,
+    #     age_qs,
+    #     age_retrive_topic_list
+    # )
 
 
 
