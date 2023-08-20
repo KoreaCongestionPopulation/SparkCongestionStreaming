@@ -59,10 +59,10 @@ n_age_topic_list = [
 ]
 n_gender_topic_list = [
     DEVMKT_NOF_GENDER,
-    PALCULT_NOF_GENDER,
-    PARK_NOF_GENDER,
-    POPAREA_NOF_GENDER,
-    TOURZONE_NOF_GENDER,
+    # PALCULT_NOF_GENDER,
+    # PARK_NOF_GENDER,
+    # POPAREA_NOF_GENDER,
+    # TOURZONE_NOF_GENDER,
 ]
 
 
@@ -80,3 +80,5 @@ gender_retrive_topic_list = [
     AVG_POPAREA_NOF_GEN,
     AVG_TOURZONE_NOF_GEN,
 ]
+
+

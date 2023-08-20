@@ -5,6 +5,8 @@ from pyspark.sql.types import (
     FloatType,
     ArrayType,
     IntegerType,
+    DoubleType, 
+    TimestampType
 )
 
 """
@@ -145,3 +147,35 @@ n_age_congestion_scheme = StructType(
 n_gender_congestion_schema = StructType(
     common_schema.fields + [n_fcst_yn, gender_rate_schema]
 )
+print(n_gender_congestion_schema)
+
+result_n_gender = StructType([
+    StructField("area_name", StringType(), True),
+    StructField("ppltn_time", TimestampType(), True),
+    StructField("avg_congestion_lvl", DoubleType(), True),
+    StructField("avg_ppltn_min", DoubleType(), True),
+    StructField("avg_ppltn_max", DoubleType(), True),
+    StructField("avg_male_ppltn_rate", DoubleType(), True),
+    StructField("avg_female_ppltn_rate", DoubleType(), True)
+])
+
+avg_age = StructType([
+    StructField("avg_ppltn_rate_0", DoubleType(), True),
+    StructField("avg_ppltn_rate_10", DoubleType(), True),
+    StructField("avg_ppltn_rate_20", DoubleType(), True),
+    StructField("avg_ppltn_rate_30", DoubleType(), True),
+    StructField("avg_ppltn_rate_40", DoubleType(), True),
+    StructField("avg_ppltn_rate_50", DoubleType(), True),
+    StructField("avg_ppltn_rate_60", DoubleType(), True),
+    StructField("avg_ppltn_rate_70", DoubleType(), True)        
+])
+
+average_n_age = StructType([
+    StructField("area_name", StringType(), True),
+    StructField("ppltn_time", TimestampType(), True),
+    StructField("avg_congestion_lvl", DoubleType(), True),
+    StructField("avg_ppltn_min", DoubleType(), True),
+    StructField("avg_ppltn_max", DoubleType(), True),
+    StructField("avg_age_rate", ArrayType(avg_age))
+])
+

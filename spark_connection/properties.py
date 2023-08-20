@@ -73,3 +73,4 @@ AVG_POPAREA_NOF_GEN: str = parser.get("AVEGENDERTOPIC", "avg_popArea_noF_GEN")
 AVG_TOURZONE_NOF_GEN: str = parser.get("AVEGENDERTOPIC", "avg_tourZone_noF_GEN")
 
 # ------------------------------------------------------------------------------
+

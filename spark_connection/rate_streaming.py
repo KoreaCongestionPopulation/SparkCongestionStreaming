@@ -1,5 +1,5 @@
 from schema.congestion_type import (
-    n_gender_congestion_schema, n_age_congestion_scheme
+    n_gender_congestion_schema, n_age_congestion_scheme, result_n_gender
 )
 from schema.topic_list import (
     n_age_topic_list, 
@@ -7,11 +7,10 @@ from schema.topic_list import (
     n_gender_topic_list,
     gender_retrive_topic_list
 )
+from properties import POPAREA_NOF_GENDER ,AVG_TOURZONE_NOF_GEN
 from common_connection import average_query
 from concurrent.futures import ThreadPoolExecutor
 
-
-# 일단 임시
 def sql_for_congestion(fields: str) -> str:
     """
     congestion 데이터를 위한 SQL 쿼리를 생성
@@ -56,21 +55,5 @@ age_rate = """
 
 age_qs = sql_for_congestion(age_rate)
 gender_qs = sql_for_congestion(gender_rate)
-with ThreadPoolExecutor(max_workers=2) as executor:
-    executor.submit(
-        average_query, 
-        n_gender_topic_list, 
-        n_gender_congestion_schema, 
-        gender_qs,
-        gender_retrive_topic_list
-    )
-    # executor.submit(
-    #     average_query, 
-    #     n_age_topic_list, 
-    #     n_age_congestion_scheme,
-    #     age_qs,
-    #     age_retrive_topic_list
-    # )
-
-
+average_query(POPAREA_NOF_GENDER, n_gender_congestion_schema, gender_qs, AVG_TOURZONE_NOF_GEN)
 
