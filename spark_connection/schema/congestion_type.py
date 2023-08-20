@@ -147,7 +147,6 @@ n_age_congestion_scheme = StructType(
 n_gender_congestion_schema = StructType(
     common_schema.fields + [n_fcst_yn, gender_rate_schema]
 )
-print(n_gender_congestion_schema)
 
 result_n_gender = StructType([
     StructField("area_name", StringType(), True),
