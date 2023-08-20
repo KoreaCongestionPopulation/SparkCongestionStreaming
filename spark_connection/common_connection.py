@@ -25,7 +25,7 @@ def kafka_connection(topic_list, schema):
     )
     
     # # kafka 확인용
-    # congestion_df = (
+    # return (
     #     kafka_stream
     #     .selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)", "topic", "partition", "offset")
     #     .withColumn("data", from_json(col("value").cast("string"), schema=schema))
@@ -35,9 +35,9 @@ def kafka_connection(topic_list, schema):
     # )
     return (
         kafka_stream
-        .selectExpr("CAST(key as STRING)", "CAST(value as STRING)")
+        .selectExpr("CAST(key as STRING)", "CAST(value as STRING)", "topic")
         .select(from_json(col("value"), schema=schema).alias("congestion"))
-        .select("congestion.*")  
+        .select("congestion.*", "topic")  
         .withColumn("ppltn_time", col("ppltn_time").cast("timestamp"))
         .withWatermark("ppltn_time", "10 minute")
     )
@@ -46,26 +46,27 @@ def kafka_connection(topic_list, schema):
 
 def average_query(topic_list, schema, sql_expresstion, retrieve_topic) -> None:
     congestion_df: DataFrame = kafka_connection(topic_list, schema)    
-    congestion_df.createOrReplaceTempView("congestion_data")
-    congestion_df.printSchema()
+    # congestion_df.createOrReplaceTempView("congestion_data")
+    # congestion_df.printSchema()
     
-    congestion_df = spark.sql(sql_expresstion)
-    json_df: DataFrame = congestion_df.withColumn("value", to_json(struct("*")))
+    # congestion_df = spark.sql(sql_expresstion)
+    # json_df: DataFrame = congestion_df.withColumn("value", to_json(struct("*")))
     
     
-    checkpoint_dir: str = f"connection/.checkpoint_{topic_list}"
-    query: StreamingQuery = (
-        json_df.writeStream
-        .outputMode("update")
-        .format("kafka")
-        .option("kafka.bootstrap.servers", "kafka1:19092,kafka2:29092,kafka3:39092")
-        .option("topic", f"{retrieve_topic},AVG_DEVMKT_GEN")
-        .option("checkpointLocation", checkpoint_dir)
-        .option("startingOffsets", "earliest")
-        .option("truncate", "false")
-        .option("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-        .start()
-    )
-    # query = json_df.writeStream.outputMode("update").format("console").option("truncate", "false").start()
+    # checkpoint_dir: str = f"connection/.checkpoint_{topic_list}"
+    # retireve = ",".join(retrieve_topic)
+    # query: StreamingQuery = (
+    #     json_df.writeStream
+    #     .outputMode("update")
+    #     .format("kafka")
+    #     .option("kafka.bootstrap.servers", "kafka1:19092,kafka2:29092,kafka3:39092")
+    #     .option("topic", retireve)
+    #     .option("checkpointLocation", checkpoint_dir)
+    #     .option("startingOffsets", "earliest")
+    #     .option("truncate", "false")
+    #     .option("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+    #     .start()
+    # )
+    query = congestion_df.writeStream.outputMode("append").format("console").option("truncate", "false").start()
     query.awaitTermination()
 

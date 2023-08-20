@@ -27,7 +27,7 @@ common_schema = StructType(
     [
         StructField("area_name", StringType(), True),
         StructField("area_congestion_lvl", IntegerType(), True),
-        StructField("ppltn_time", TimestampType(), True),
+        StructField("ppltn_time", FloatType(), True),
         StructField("area_congestion_msg", StringType(), True),
         StructField("area_ppltn_min", IntegerType(), True),
         StructField("area_ppltn_max", IntegerType(), True),
@@ -79,8 +79,8 @@ schema ex)
 gender_rate_schema = StructField(
     "gender_rate", StructType(
         [
-            StructField("male_ppltn_rate", FloatType(), True),
-            StructField("female_ppltn_rate", FloatType(), True),
+            StructField("male_ppltn_rate", DoubleType(), True),
+            StructField("female_ppltn_rate", DoubleType(), True),
         ]
     ), True,
 )
@@ -103,7 +103,7 @@ schema ex)
 }
 """
 age_congestion_specific_schema = StructField(
-    "age_congestion_specific", StructType(
+    "age_rate", StructType(
         [
             StructField("ppltn_rate_0", FloatType(), True),
             StructField("ppltn_rate_10", FloatType(), True),
@@ -150,7 +150,7 @@ n_gender_congestion_schema = StructType(
 
 result_n_gender = StructType([
     StructField("area_name", StringType(), True),
-    StructField("ppltn_time", TimestampType(), True),
+    StructField("ppltn_time", FloatType(), True),
     StructField("avg_congestion_lvl", DoubleType(), True),
     StructField("avg_ppltn_min", DoubleType(), True),
     StructField("avg_ppltn_max", DoubleType(), True),

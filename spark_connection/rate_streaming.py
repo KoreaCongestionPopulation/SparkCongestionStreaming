@@ -55,5 +55,5 @@ age_rate = """
 
 age_qs = sql_for_congestion(age_rate)
 gender_qs = sql_for_congestion(gender_rate)
-average_query(n_age_topic_list, n_gender_congestion_schema, gender_qs, age_retrive_topic_list)
+average_query(n_gender_topic_list, n_gender_congestion_schema, gender_qs, age_retrive_topic_list)
 
