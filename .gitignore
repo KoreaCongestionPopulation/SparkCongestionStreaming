@@ -161,3 +161,4 @@ cython_debug/
 .vscode
 config/setting.conf
 test.py
+connection_db.py

@@ -7,7 +7,7 @@ from schema.topic_list import (
     n_gender_topic_list,
     gender_retrive_topic_list
 )
-from properties import POPAREA_NOF_GENDER ,AVG_TOURZONE_NOF_GEN
+# from properties import POPAREA_NOF_GENDER ,AVG_POPAREA_NOF_GEN, AVG_DEVMKT_GEN
 from common_connection import average_query
 from concurrent.futures import ThreadPoolExecutor
 
@@ -25,6 +25,7 @@ def sql_for_congestion(fields: str) -> str:
     SELECT 
         cg.area_name,
         cg.ppltn_time,
+        cg.area_congestion_msg,
         AVG(cg.area_congestion_lvl) as avg_congestion_lvl,
         AVG(cg.area_ppltn_min) as avg_ppltn_min,
         AVG(cg.area_ppltn_max) as avg_ppltn_max,
@@ -32,9 +33,8 @@ def sql_for_congestion(fields: str) -> str:
     FROM 
         congestion_data as cg
     GROUP BY
-        cg.area_name, cg.ppltn_time
+        cg.area_name, cg.area_congestion_msg, cg.ppltn_time
     """
-
 
 gender_rate = """
     AVG(cg.gender_rate.male_ppltn_rate) as avg_male_ppltn_rate,
@@ -55,5 +55,5 @@ age_rate = """
 
 age_qs = sql_for_congestion(age_rate)
 gender_qs = sql_for_congestion(gender_rate)
-average_query(POPAREA_NOF_GENDER, n_gender_congestion_schema, gender_qs, AVG_TOURZONE_NOF_GEN)
+average_query(n_age_topic_list, n_gender_congestion_schema, gender_qs, age_retrive_topic_list)
 

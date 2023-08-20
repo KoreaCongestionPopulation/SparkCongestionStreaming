@@ -27,7 +27,7 @@ common_schema = StructType(
     [
         StructField("area_name", StringType(), True),
         StructField("area_congestion_lvl", IntegerType(), True),
-        StructField("ppltn_time", FloatType(), True),
+        StructField("ppltn_time", TimestampType(), True),
         StructField("area_congestion_msg", StringType(), True),
         StructField("area_ppltn_min", IntegerType(), True),
         StructField("area_ppltn_max", IntegerType(), True),
