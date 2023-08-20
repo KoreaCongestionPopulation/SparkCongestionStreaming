@@ -46,27 +46,27 @@ def kafka_connection(topic_list, schema):
 
 def average_query(topic_list, schema, sql_expresstion, retrieve_topic) -> None:
     congestion_df: DataFrame = kafka_connection(topic_list, schema)    
-    # congestion_df.createOrReplaceTempView("congestion_data")
-    # congestion_df.printSchema()
+    congestion_df.createOrReplaceTempView("congestion_data")
+    congestion_df.printSchema()
     
-    # congestion_df = spark.sql(sql_expresstion)
-    # json_df: DataFrame = congestion_df.withColumn("value", to_json(struct("*")))
+    congestion_df = spark.sql(sql_expresstion)
+    json_df: DataFrame = congestion_df.withColumn("value", to_json(struct("*")))
     
     
-    # checkpoint_dir: str = f"connection/.checkpoint_{topic_list}"
-    # retireve = ",".join(retrieve_topic)
-    # query: StreamingQuery = (
-    #     json_df.writeStream
-    #     .outputMode("update")
-    #     .format("kafka")
-    #     .option("kafka.bootstrap.servers", "kafka1:19092,kafka2:29092,kafka3:39092")
-    #     .option("topic", retireve)
-    #     .option("checkpointLocation", checkpoint_dir)
-    #     .option("startingOffsets", "earliest")
-    #     .option("truncate", "false")
-    #     .option("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-    #     .start()
-    # )
-    query = congestion_df.writeStream.outputMode("append").format("console").option("truncate", "false").start()
+    checkpoint_dir: str = f"connection/.checkpoint_{topic_list}"
+    retireve = ",".join(retrieve_topic)
+    query: StreamingQuery = (
+        json_df.writeStream
+        .outputMode("update")
+        .format("kafka")
+        .option("kafka.bootstrap.servers", "kafka1:19092,kafka2:29092,kafka3:39092")
+        .option("topic", retireve)
+        .option("checkpointLocation", checkpoint_dir)
+        .option("startingOffsets", "earliest")
+        .option("truncate", "false")
+        .option("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+        .start()
+    )
+    # query = congestion_df.writeStream.outputMode("append").format("console").option("truncate", "false").start()
     query.awaitTermination()
 
