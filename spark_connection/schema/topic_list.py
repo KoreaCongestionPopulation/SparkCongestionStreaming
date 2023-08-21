@@ -4,11 +4,6 @@ from properties import (
     PARK_AGE,
     POPAREA_AGE,
     TOURZONE_AGE,
-    AVG_DEVMKT_AGE,
-    AVG_PALCULT_AGE,
-    AVG_PARK_AGE,
-    AVG_POPAREA_AGE,
-    AVG_TOURZONE_AGE,
 )
 from properties import (
     DEVMKT_GENDER,
@@ -16,11 +11,6 @@ from properties import (
     PARK_GENDER,
     POPAREA_GENDER,
     TOURZONE_GENDER,
-    AVG_DEVMKT_GEN,
-    AVG_PALCULT_GEN,
-    AVG_PARK_GEN,
-    AVG_POPAREA_GEN,
-    AVG_TOURZONE_GEN,
 )
 from properties import (
     DEVMKT_NOF_AGE,
@@ -28,11 +18,6 @@ from properties import (
     PARK_NOF_AGE,
     POPAREA_NOF_AGE,
     TOURZONE_NOF_AGE,
-    AVG_DEVMKT_NOF_AGE,
-    AVG_PALCULT_NOF_AGE,
-    AVG_PARK_NOF_AGE,
-    AVG_POPAREA_NOF_AGE,
-    AVG_TOURZONE_NOF_AGE,
 )
 from properties import (
     DEVMKT_NOF_GENDER,
@@ -40,14 +25,7 @@ from properties import (
     PARK_NOF_GENDER,
     POPAREA_NOF_GENDER,
     TOURZONE_NOF_GENDER,
-    AVG_DEVMKT_NOF_GEN,
-    AVG_PALCULT_NOF_GEN,
-    AVG_PARK_NOF_GEN,
-    AVG_POPAREA_NOF_GEN,
-    AVG_TOURZONE_NOF_GEN,
 )
-
-
 
 
 n_age_topic_list = [
@@ -66,19 +44,18 @@ n_gender_topic_list = [
 ]
 
 
-age_retrive_topic_list = [
-    AVG_DEVMKT_NOF_AGE,
-    AVG_PALCULT_NOF_AGE,
-    AVG_PARK_NOF_AGE,
-    AVG_POPAREA_NOF_AGE,
-    AVG_TOURZONE_NOF_AGE,
+age_topic_list = [
+    DEVMKT_AGE,
+    PALCULT_AGE,
+    PARK_AGE,
+    POPAREA_AGE,
+    TOURZONE_AGE,
 ]
-gender_retrive_topic_list = [
-    AVG_DEVMKT_NOF_GEN,
-    AVG_PALCULT_NOF_GEN,
-    AVG_PARK_NOF_GEN,
-    AVG_POPAREA_NOF_GEN,
-    AVG_TOURZONE_NOF_GEN,
+gender_topic_list = [
+    DEVMKT_GENDER,
+    PALCULT_GENDER,
+    PARK_GENDER,
+    POPAREA_GENDER,
+    TOURZONE_GENDER,
 ]
-
 

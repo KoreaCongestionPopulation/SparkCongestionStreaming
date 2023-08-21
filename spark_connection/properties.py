@@ -43,34 +43,8 @@ TOURZONE_NOF_GENDER: str = parser.get("GENDERTOPIC", "tourist_zone_noFCST_GENDER
 
 # ------------------------------------------------------------------------------
 
-
-# AGE TOPIC
-AVG_DEVMKT_AGE: str = parser.get("AVEAGETOPIC", "avg_devMkt_AGE")
-AVG_PALCULT_AGE: str = parser.get("AVEAGETOPIC", "avg_palCult_AGE")
-AVG_PARK_AGE: str = parser.get("AVEAGETOPIC", "avg_park_AGE")
-AVG_POPAREA_AGE: str = parser.get("AVEAGETOPIC", "avg_popArea_AGE")
-AVG_TOURZONE_AGE: str = parser.get("AVEAGETOPIC", "avg_tourZone_AGE")
-
-AVG_DEVMKT_NOF_AGE: str = parser.get("AVEAGETOPIC", "avg_devMkt_noF_AGE")
-AVG_PALCULT_NOF_AGE: str = parser.get("AVEAGETOPIC", "avg_palCult_noF_AGE")
-AVG_PARK_NOF_AGE: str = parser.get("AVEAGETOPIC", "avg_park_noF_AGE")
-AVG_POPAREA_NOF_AGE: str = parser.get("AVEAGETOPIC", "avg_popArea_noF_AGE")
-AVG_TOURZONE_NOF_AGE: str = parser.get("AVEAGETOPIC", "avg_tourZone_noF_AGE")
-
-# ------------------------------------------------------------------------------
-
-# GENDER TOPIC
-AVG_DEVMKT_GEN: str = parser.get("AVEGENDERTOPIC", "avg_devMkt_GEN")
-AVG_PALCULT_GEN: str = parser.get("AVEGENDERTOPIC", "avg_palCult_GEN")
-AVG_PARK_GEN: str = parser.get("AVEGENDERTOPIC", "avg_park_GEN")
-AVG_POPAREA_GEN: str = parser.get("AVEGENDERTOPIC", "avg_popArea_GEN")
-AVG_TOURZONE_GEN: str = parser.get("AVEGENDERTOPIC", "avg_tourZone_GEN")
-
-AVG_DEVMKT_NOF_GEN: str = parser.get("AVEGENDERTOPIC", "avg_devMkt_noF_GEN")
-AVG_PALCULT_NOF_GEN: str = parser.get("AVEGENDERTOPIC", "avg_palCult_noF_GEN")
-AVG_PARK_NOF_GEN: str = parser.get("AVEGENDERTOPIC", "avg_park_noF_GEN")
-AVG_POPAREA_NOF_GEN: str = parser.get("AVEGENDERTOPIC", "avg_popArea_noF_GEN")
-AVG_TOURZONE_NOF_GEN: str = parser.get("AVEGENDERTOPIC", "avg_tourZone_noF_GEN")
-
-# ------------------------------------------------------------------------------
+AVG_AGE_TOPIC: str = parser.get("AVGTOPIC", "avg_age_topic")
+AVG_GENDER_TOPIC: str = parser.get("AVGTOPIC", "avg_gender_topic")
+AVG_N_AGE_TOPIC: str = parser.get("AVGTOPIC", "avg_n_age_topic")
+AVG_N_GENDER_TOPIC: str = parser.get("AVGTOPIC", "avg_n_gender_topic")
 
