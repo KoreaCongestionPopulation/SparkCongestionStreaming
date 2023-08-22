@@ -44,7 +44,7 @@ def kafka_connection(topic_list, schema):
     
 
 
-def average_query(topic_list, schema, sql_expresstion, retrieve_topic, temp_view) -> None:
+def average_query(topic_list, schema, temp_view, sql_expresstion, retrieve_topic) -> None:
     try:
         congestion_df: DataFrame = kafka_connection(topic_list, schema)    
         congestion_df.createOrReplaceTempView(temp_view)
