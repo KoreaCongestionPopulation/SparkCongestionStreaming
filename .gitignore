@@ -162,3 +162,8 @@ cython_debug/
 config/setting.conf
 test.py
 connection_db.py
+
+.checkpoint_avg_age_topic
+.checkpoint_avg_gender_topic
+.checkpoint_avg_n_age_topic
+.checkpoint_avg_n_gender_topic

@@ -24,60 +24,48 @@ GROUP BY
     cd.area_name, cd.ppltn_time
 
 
-
-
 USE YourDatabaseName;
 
-WITH CombinedData AS(
-	SELECT 
-		A.area_name as area_name, 
-		A.ppltn_time as ppltn_time,
-		A.area_congestion_lvl as area_congestion_lvl,
-        A.area_congestion_msg as area_congestion_msg,
-		A.area_ppltn_min as area_ppltn_min,
-		A.area_ppltn_max as area_ppltn_max,
-		F.fcst_time as fcst_time,
-		F.fcst_congest_lvl as fcst_congest_lvl,
-		F.fcst_ppltn_min as fcst_ppltn_min,
-		F.fcst_ppltn_max as fcst_ppltn_max,
-		R.ppltn_rate_0 as ppltn_rate_0,
-		R.ppltn_rate_10 as ppltn_rate_10,
-		R.ppltn_rate_20 as ppltn_rate_20,
-		R.ppltn_rate_30 as ppltn_rate_30,
-		R.ppltn_rate_40 as ppltn_rate_40,
-		R.ppltn_rate_50 as ppltn_rate_50,
-		R.ppltn_rate_60 as ppltn_rate_60,
-		R.ppltn_rate_70 as ppltn_rate_70
-	FROM 
-		AreaData AS A
-	JOIN 
-		ForecastData AS F ON A.area_name = F.area_name 
-	JOIN 
-		AgeRateData AS R ON A.area_name = R.area_name
+WITH CombienData AS (
+    SELECT 
+        A.area_name,
+        A.ppltn_time,
+        AVG(G.fcst_congest_lvl) as avg_fcst_congest_lvl,
+        AVG(G.fcst_ppltn_max) as avg_fcst_ppltn_max,
+        AVG(G.fcst_ppltn_min) as avg_fcst_ppltn_min, 
+        G.fcst_time,
+        A.area_congestion_msg,
+        AVG(A.area_congestion_lvl) as avg_area_congestion_lvl,
+        AVG(A.area_ppltn_max) as avg_ppltn_max,
+        AVG(A.area_ppltn_min) as avg_ppltn_min,       
+        AVG(R.ppltn_rate_0) as avg_ppltn_rate_0,
+		AVG(R.ppltn_rate_10) as avg_ppltn_rate_10,
+		AVG(R.ppltn_rate_20) as avg_ppltn_rate_20,
+		AVG(R.ppltn_rate_30) as avg_ppltn_rate_30,
+		AVG(R.ppltn_rate_40) as avg_ppltn_rate_40,
+		AVG(R.ppltn_rate_50) as avg_ppltn_rate_50,
+		AVG(R.ppltn_rate_60) as avg_ppltn_rate_60,
+		AVG(R.ppltn_rate_70) as avg_ppltn_rate_70
+    FROM 
+        AgeRateData as R
+    JOIN
+        AreaData as A ON R.area_name = A.area_name
+    LEFT OUTER JOIN ForecastData as G
+        ON 
+			A.area_name = G.area_name 
+    GROUP BY 
+        A.area_name, 
+        A.ppltn_time,
+        A.area_congestion_msg,
+        G.fcst_time,
+        G.fcst_congest_lvl,
+        G.fcst_ppltn_max,
+        G.fcst_ppltn_min
 )
 
 SELECT
-    area_name,
-    ppltn_time,
-    area_congestion_msg, 
-    AVG(area_congestion_lvl) AS avg_area_congestion_lvl,
-    AVG(area_ppltn_min) AS avg_area_ppltn_min,
-    AVG(area_ppltn_max) AS avg_area_ppltn_max,
-    AVG(fcst_congest_lvl) as fcst_congest_lvl,
-    AVG(ppltn_rate_0) AS avg_ppltn_rate_0,
-    AVG(ppltn_rate_10) AS avg_ppltn_rate_10,
-    AVG(ppltn_rate_20) AS avg_ppltn_rate_20,
-    AVG(ppltn_rate_30) AS avg_ppltn_rate_30,
-    AVG(ppltn_rate_40) AS avg_ppltn_rate_40,
-    AVG(ppltn_rate_50) AS avg_ppltn_rate_50,
-    AVG(ppltn_rate_60) AS avg_ppltn_rate_60,
-    AVG(ppltn_rate_70) AS avg_ppltn_rate_70
-FROM
-    CombinedData
-GROUP BY
-    area_name, ppltn_time, area_congestion_msg
-
-;
-
+	*
+FROM 
+	CombienData
 
 
