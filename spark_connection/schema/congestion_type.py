@@ -13,6 +13,7 @@ from pyspark.sql.types import (
 # -------------------------------------------------
 
 common_schema = StructType([
+    StructField("category", StringType(), True),
     StructField("area_name", StringType(), True),
     StructField("area_congestion_lvl", IntegerType(), True),
     StructField("ppltn_time", DoubleType(), True),
@@ -23,8 +24,7 @@ common_schema = StructType([
 
 # ---------------------------------------------------
 #    seoul congestion fcst_yn register schema     
-# ---------------------------------------------------
-#         StructField("fcst_ppltn", ArrayType(
+# ---------------------------------------------------ㅉ
 
 fcst_ppltn_schema = ArrayType(
     StructType([

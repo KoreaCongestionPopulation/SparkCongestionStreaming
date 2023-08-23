@@ -48,3 +48,15 @@ AVG_GENDER_TOPIC: str = parser.get("AVGTOPIC", "avg_gender_topic")
 AVG_N_AGE_TOPIC: str = parser.get("AVGTOPIC", "avg_n_age_topic")
 AVG_N_GENDER_TOPIC: str = parser.get("AVGTOPIC", "avg_n_gender_topic")
 
+# ------------------------------------------------------------------------------
+
+
+KAFKA_BOOTSTRAP_SERVERS: str = parser.get("KAFKA", "KAFKA_BOOTSTRAP_SERVERS")
+MYSQL_URL: str = parser.get("KAFKA", "MYSQL_URL")
+MYSQL_USER: str = parser.get("KAFKA", "MYSQL_USER")
+MYSQL_PASSWORD: str = parser.get("KAFKA", "MYSQL_PASSWORD")
+
+AGE_CONGESTION: str = parser.get("KAFKA", "age_congestion")
+AGE_CONGESTION_PRED: str = parser.get("KAFKA", "age_congestion_pred")
+GENDER_CONGESTION: str = parser.get("KAFKA", "gender_congestion")
+GENDER_CONGESTION_PRED: str = parser.get("KAFKA", "gender_congestion_pred")
