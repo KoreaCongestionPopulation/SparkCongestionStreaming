@@ -28,6 +28,7 @@ class SparkCongestionProcessor:
             .config("spark.executor.memory", "10g")
             .config("spark.executor.cores", "4")
             .config("spark.cores.max", "4")
+            .config("spark.sql.adaptive.enabled", "false")
             .getOrCreate()
         )
 
@@ -82,7 +83,7 @@ class SparkCongestionProcessor:
                 .option("dbtable", table_name) \
                 .option("user", MYSQL_USER) \
                 .option("password", MYSQL_PASSWORD) \
-                .mode("ignore") \
+                .mode("append") \
                 .save()
 
         return (
@@ -90,7 +91,7 @@ class SparkCongestionProcessor:
             .outputMode("update") 
             .foreachBatch(write_batch_to_mysql) 
             .option("checkpointLocation", checkpoint_dir)
-            .trigger(processingTime='5 minutes') 
+            .trigger(processingTime='1 minutes') 
             .start()
         )
 
