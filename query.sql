@@ -69,3 +69,75 @@ FROM
 	CombienData
 
 
+
+
+CREATE TABLE gender_congestion_pred (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(255) NOT NULL,
+    area_name VARCHAR(255) NOT NULL,
+    ppltn_time DATETIME NOT NULL,
+    area_congestion_msg TEXT,
+    avg_congestion_lvl FLOAT NOT NULL,
+    avg_ppltn_min FLOAT NOT NULL,
+    avg_ppltn_max FLOAT NOT NULL,
+    avg_fcst_congest_lvl FLOAT NOT NULL,
+    avg_fcst_ppltn_min FLOAT NOT NULL,
+    avg_fcst_ppltn_max FLOAT NOT NULL,
+    avg_male_ppltn_rate FLOAT NOT NULL,
+    avg_female_ppltn_rate FLOAT NOT NULL
+);
+
+CREATE TABLE age_congestion_pred (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(255) NOT NULL,
+    area_name VARCHAR(255) NOT NULL,
+    ppltn_time DATETIME NOT NULL,
+    area_congestion_msg TEXT,
+    avg_congestion_lvl FLOAT NOT NULL,
+    avg_ppltn_min FLOAT NOT NULL,
+    avg_ppltn_max FLOAT NOT NULL,
+    avg_fcst_congest_lvl FLOAT NOT NULL,
+    avg_fcst_ppltn_min FLOAT NOT NULL,
+    avg_fcst_ppltn_max FLOAT NOT NULL,
+    avg_ppltn_rate_0 FLOAT NOT NULL,
+    avg_ppltn_rate_10 FLOAT NOT NULL,
+    avg_ppltn_rate_20 FLOAT NOT NULL,
+    avg_ppltn_rate_30 FLOAT NOT NULL,
+    avg_ppltn_rate_40 FLOAT NOT NULL,
+    avg_ppltn_rate_50 FLOAT NOT NULL,
+    avg_ppltn_rate_60 FLOAT NOT NULL,
+    avg_ppltn_rate_70 FLOAT NOT NULL
+);
+
+CREATE TABLE age_congestion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(50) NOT NULL,
+    area_name VARCHAR(100) NOT NULL,
+    ppltn_time DATETIME,
+    area_congestion_msg TEXT,
+    avg_congestion_lvl FLOAT NOT NULL,
+    avg_ppltn_min FLOAT NOT NULL,
+    avg_ppltn_max FLOAT NOT NULL,
+    avg_ppltn_rate_0 FLOAT NOT NULL, 
+    avg_ppltn_rate_10 FLOAT NOT NULL,
+    avg_ppltn_rate_20 FLOAT NOT NULL,
+    avg_ppltn_rate_30 FLOAT NOT NULL,
+    avg_ppltn_rate_40 FLOAT NOT NULL,
+    avg_ppltn_rate_50 FLOAT NOT NULL,
+    avg_ppltn_rate_60 FLOAT NOT NULL,
+    avg_ppltn_rate_70 FLOAT NOT NULL
+);
+
+CREATE TABLE gender_congestion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(50) NOT NULL,
+    area_name VARCHAR(100) NOT NULL,
+    ppltn_time DATETIME,
+    area_congestion_msg TEXT,
+    avg_congestion_lvl FLOAT NOT NULL,
+    avg_ppltn_min FLOAT NOT NULL,
+    avg_ppltn_max FLOAT NOT NULL,
+    avg_male_ppltn_rate FLOAT NOT NULL,
+    avg_female_ppltn_rate FLOAT NOT NULL
+);
+

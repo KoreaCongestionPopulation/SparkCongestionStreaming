@@ -18,6 +18,7 @@ class SparkStreamingQueryOrganization:
         self.with_data_congestion = f"""
             WITH {self.with_temp_view} AS (
                 SELECT 
+                    category,
                     area_name,
                     ppltn_time,
                     area_congestion_lvl,
@@ -53,6 +54,7 @@ class SparkStreamingQueryOrganization:
         
         return f"""
         SELECT 
+            cg.category,
             cg.area_name,
             cg.ppltn_time,
             cg.area_congestion_msg,
@@ -63,7 +65,10 @@ class SparkStreamingQueryOrganization:
         FROM 
             {temp_view} as cg
         GROUP BY
-            cg.area_name, cg.area_congestion_msg, cg.ppltn_time
+            cg.area_name, 
+            cg.area_congestion_msg, 
+            cg.ppltn_time,
+            cg.category
         """
 
     def n_gender_rate_query(self) -> str:
