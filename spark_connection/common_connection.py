@@ -1,7 +1,16 @@
+from properties import (
+    KAFKA_BOOTSTRAP_SERVERS, 
+    MYSQL_PASSWORD,
+    MYSQL_URL, 
+    MYSQL_USER, 
+    AWS_ACCESS_KEY_ID, 
+    AWS_SECRET_ACCESS_KEY,
+    S3_LOCATION,
+)
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.streaming import StreamingQuery
 from pyspark.sql.functions import col, from_json, to_json, struct
-from properties import KAFKA_BOOTSTRAP_SERVERS, MYSQL_PASSWORD, MYSQL_URL, MYSQL_USER
+
 
 class SparkCongestionProcessor:
     def __init__(self):
@@ -9,17 +18,24 @@ class SparkCongestionProcessor:
 
     @staticmethod
     def create_spark_session() -> SparkSession:
-        return (
+        spark = (
             SparkSession.builder
             .appName("CongestionSouelPreprocessing")
             .master("local[*]")
-            .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,mysql:mysql-connector-java:8.0.28")
+            .config("spark.jars.packages", "com.google.guava:guava:27.0-jre,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,mysql:mysql-connector-java:8.0.28,org.apache.hadoop:hadoop-aws:3.2.2") 
+            # .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
             .config("spark.streaming.stopGracefullyOnShutdown", "true")
             .config("spark.executor.memory", "10g")
             .config("spark.executor.cores", "4")
             .config("spark.cores.max", "4")
             .getOrCreate()
         )
+
+        # AWS Credentials 설정
+        # spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.access.key", AWS_ACCESS_KEY_ID)
+        # spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.secret.key", AWS_SECRET_ACCESS_KEY)
+        # spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+        return spark
 
     def read_from_kafka(self, topic_list, schema) -> DataFrame:
         kafka_stream = (
@@ -40,8 +56,8 @@ class SparkCongestionProcessor:
         )
 
     def write_to_kafka(self, df: DataFrame, topic: str) -> StreamingQuery:
+        # checkpoint_dir = f"{S3_LOCATION}/connection/.checkpoint_{topic}"
         checkpoint_dir = f"connection/.checkpoint_{topic}"
-
         return (
             df.writeStream
             .outputMode("update")
@@ -55,13 +71,14 @@ class SparkCongestionProcessor:
         )
 
     def write_to_mysql(self, df: DataFrame, table_name: str) -> StreamingQuery:
+        # checkpoint_dir = f"{S3_LOCATION}/connection/.checkpoint_{table_name}"
         checkpoint_dir = f"connection/.checkpoint_{table_name}"
 
         def write_batch_to_mysql(batch_df, batch_id) -> None:
             batch_df.write \
                 .format("jdbc") \
                 .option("url", MYSQL_URL) \
-                .option("driver", "com.mysql.jdbc.Driver") \
+                .option("driver", "com.mysql.cj.jdbc.Driver") \
                 .option("dbtable", table_name) \
                 .option("user", MYSQL_USER) \
                 .option("password", MYSQL_PASSWORD) \

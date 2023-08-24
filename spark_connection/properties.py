@@ -1,7 +1,7 @@
 """
 API에 필요한것들
 """
-import sys
+import os
 import configparser
 from pathlib import Path
 
@@ -9,7 +9,8 @@ from pathlib import Path
 path = Path(__file__).parent.parent
 parser = configparser.ConfigParser()
 parser.read(f"{path}/config/setting.conf")
-
+guava_jar_path = os.path.abspath("./dependent/guava-27.0-jre.jar")
+print(guava_jar_path)
 
 
 # AGE TOPIC
@@ -60,3 +61,6 @@ AGE_CONGESTION: str = parser.get("KAFKA", "age_congestion")
 AGE_CONGESTION_PRED: str = parser.get("KAFKA", "age_congestion_pred")
 GENDER_CONGESTION: str = parser.get("KAFKA", "gender_congestion")
 GENDER_CONGESTION_PRED: str = parser.get("KAFKA", "gender_congestion_pred")
+AWS_ACCESS_KEY_ID: str = parser.get("KAFKA", "AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY: str = parser.get("KAFKA", "AWS_SECRET_ACCESS_KEY")
+S3_LOCATION: str = parser.get("KAFKA", "S3_LOCATION")
