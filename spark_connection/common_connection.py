@@ -23,7 +23,7 @@ class SparkCongestionProcessor:
             .appName("CongestionSouelPreprocessing")
             .master("local[*]")
             .config("spark.jars.packages", "com.google.guava:guava:27.0-jre,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,mysql:mysql-connector-java:8.0.28,org.apache.hadoop:hadoop-aws:3.2.2") 
-            # .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
+            .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
             .config("spark.streaming.stopGracefullyOnShutdown", "true")
             .config("spark.executor.memory", "10g")
             .config("spark.executor.cores", "4")
@@ -59,6 +59,7 @@ class SparkCongestionProcessor:
     def write_to_kafka(self, df: DataFrame, topic: str) -> StreamingQuery:
         # checkpoint_dir = f"{S3_LOCATION}/connection/.checkpoint_{topic}"
         checkpoint_dir = f"connection/.checkpoint_{topic}"
+        
         return (
             df.writeStream
             .outputMode("update")

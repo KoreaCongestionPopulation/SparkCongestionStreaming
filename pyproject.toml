@@ -12,6 +12,7 @@ mypy = "^1.5.1"
 pylint = "^2.17.5"
 findspark = "^2.0.1"
 pyspark = "3.3.0"
+aiomysql = "^0.2.0"
 
 
 [build-system]

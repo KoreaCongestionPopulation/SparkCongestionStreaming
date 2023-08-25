@@ -1,7 +1,6 @@
 """
 API에 필요한것들
 """
-import os
 import configparser
 from pathlib import Path
 
@@ -9,8 +8,7 @@ from pathlib import Path
 path = Path(__file__).parent.parent
 parser = configparser.ConfigParser()
 parser.read(f"{path}/config/setting.conf")
-guava_jar_path = os.path.abspath("./dependent/guava-27.0-jre.jar")
-print(guava_jar_path)
+
 
 
 # AGE TOPIC
