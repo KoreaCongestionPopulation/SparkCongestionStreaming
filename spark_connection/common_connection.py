@@ -59,8 +59,8 @@ class SparkCongestionProcessor:
         )
 
     def write_to_kafka(self, df: DataFrame, topic: str) -> StreamingQuery:
-        # checkpoint_dir = f"{S3_LOCATION}/connection/.checkpoint_{topic}"
-        checkpoint_dir = f"connection/.checkpoint_{topic}"
+        checkpoint_dir = f"{S3_LOCATION}/connection/.checkpoint_{topic}"
+        # checkpoint_dir = f"connection/.checkpoint_{topic}"
         
         return (
             df.writeStream
@@ -108,7 +108,7 @@ class SparkCongestionProcessor:
 
             processed_df = self.spark.sql(sql_expression)
             json_df = processed_df.withColumn("value", to_json(struct("*")))
-            table_injection = processed_df.select("*")
+            # table_injection = processed_df.select("*")
 
             # # Write to Kafka
             query_kafka = self.write_to_kafka(json_df, retrieve_topic)
