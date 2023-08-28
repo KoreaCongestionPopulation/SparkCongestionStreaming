@@ -26,6 +26,7 @@ class SparkCongestionProcessor:
             .config("spark.jars.packages", "com.google.guava:guava:27.0-jre,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,mysql:mysql-connector-java:8.0.28,org.apache.hadoop:hadoop-aws:3.2.2") 
             .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
             .config("spark.streaming.stopGracefullyOnShutdown", "true")
+            .config("spark.streaming.kafka.consumer.config.auto.offset.reset", "latest") 
             .config("spark.executor.memory", "10g")
             .config("spark.executor.cores", "4")
             .config("spark.cores.max", "4")
