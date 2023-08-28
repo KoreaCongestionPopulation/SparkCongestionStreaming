@@ -73,29 +73,29 @@ class SparkCongestionProcessor:
             .start()
         )
 
-    def write_to_mysql(self, df: DataFrame, table_name: str) -> StreamingQuery:
-        # checkpoint_dir = f"{S3_LOCATION}/connection/.checkpoint_{table_name}"
-        checkpoint_dir = f"connection/.checkpoint_{table_name}"
+    # def write_to_mysql(self, df: DataFrame, table_name: str) -> StreamingQuery:
+    #     # checkpoint_dir = f"{S3_LOCATION}/connection/.checkpoint_{table_name}"
+    #     checkpoint_dir = f"connection/.checkpoint_{table_name}"
 
-        def write_batch_to_mysql(batch_df, batch_id) -> None:
-            batch_df.write \
-                .format("jdbc") \
-                .option("url", MYSQL_URL) \
-                .option("driver", "com.mysql.cj.jdbc.Driver") \
-                .option("dbtable", table_name) \
-                .option("user", MYSQL_USER) \
-                .option("password", MYSQL_PASSWORD) \
-                .mode("append") \
-                .save()
+    #     def write_batch_to_mysql(batch_df, batch_id) -> None:
+    #         batch_df.write \
+    #             .format("jdbc") \
+    #             .option("url", MYSQL_URL) \
+    #             .option("driver", "com.mysql.cj.jdbc.Driver") \
+    #             .option("dbtable", table_name) \
+    #             .option("user", MYSQL_USER) \
+    #             .option("password", MYSQL_PASSWORD) \
+    #             .mode("append") \
+    #             .save()
 
-        return (
-            df.writeStream
-            .outputMode("update") 
-            .foreachBatch(write_batch_to_mysql) 
-            .option("checkpointLocation", checkpoint_dir)
-            .trigger(processingTime='1 minutes') 
-            .start()
-        )
+    #     return (
+    #         df.writeStream
+    #         .outputMode("update") 
+    #         .foreachBatch(write_batch_to_mysql) 
+    #         .option("checkpointLocation", checkpoint_dir)
+    #         .trigger(processingTime='1 minutes') 
+    #         .start()
+    #     )
 
 
     def process(self, topic_list, schema, temp_view, sql_expression, retrieve_topic, mysql_table_name) -> None:
@@ -113,11 +113,11 @@ class SparkCongestionProcessor:
             query_kafka = self.write_to_kafka(json_df, retrieve_topic)
 
             # Write to MySQL
-            query_mysql = self.write_to_mysql(table_injection, mysql_table_name)
+            # query_mysql = self.write_to_mysql(table_injection, mysql_table_name)
 
             # Await Termination for both Kafka and MySQL
             query_kafka.awaitTermination()
-            query_mysql.awaitTermination()
+            # query_mysql.awaitTermination()
             # query = table_injection.writeStream.outputMode("update").format("console").option("truncate", "false").start()
             # query.awaitTermination()
         except Exception as error:
