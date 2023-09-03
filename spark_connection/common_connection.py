@@ -54,7 +54,7 @@ class SparkCongestionProcessor:
             .selectExpr("CAST(key as STRING)", "CAST(value as STRING)")
             .select(from_json(col("value"), schema=schema).alias("congestion"))
             .select("congestion.*")
-            .withColumn("ppltn_time", col("ppltn_time").cast("string"))
+            .withColumn("ppltn_time", col("ppltn_time").cast("timestamp"))
             .withWatermark("ppltn_time", "5 minute")
         )
 

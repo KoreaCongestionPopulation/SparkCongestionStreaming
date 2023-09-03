@@ -56,7 +56,7 @@ class SparkStreamingQueryOrganization:
         SELECT 
             cg.category,
             cg.area_name,
-            cg.ppltn_time,
+            regexp_replace(cg.ppltn_time, 'Z', '') as ppltn_time,
             cg.area_congestion_msg,
             AVG(cg.area_congestion_lvl) as avg_congestion_lvl,
             AVG(cg.area_ppltn_min) as avg_ppltn_min,
