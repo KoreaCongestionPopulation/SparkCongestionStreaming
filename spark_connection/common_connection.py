@@ -21,7 +21,7 @@ class SparkCongestionProcessor:
         spark = (
             SparkSession.builder
             .appName("CongestionSouelPreprocessing")
-            .master("local[*]")
+            .master("spark://spark-master:7077")
             .config("spark.streaming.backpressure.enabled", "true") 
             .config("spark.jars.packages", "com.google.guava:guava:27.0-jre,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,mysql:mysql-connector-java:8.0.28,org.apache.hadoop:hadoop-aws:3.2.2") 
             .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
