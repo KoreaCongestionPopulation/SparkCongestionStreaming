@@ -5,7 +5,8 @@ from pyspark.sql.types import (
     FloatType,
     ArrayType,
     IntegerType,
-    DoubleType
+    DoubleType,
+    TimestampType
 )
 
 # -------------------------------------------------
@@ -16,7 +17,7 @@ common_schema = StructType([
     StructField("category", StringType(), True),
     StructField("area_name", StringType(), True),
     StructField("area_congestion_lvl", IntegerType(), True),
-    StructField("ppltn_time", StringType(), True),
+    StructField("ppltn_time", TimestampType(), True),
     StructField("area_congestion_msg", StringType(), True),
     StructField("area_ppltn_min", IntegerType(), True),
     StructField("area_ppltn_max", IntegerType(), True),
