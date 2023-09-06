@@ -3,10 +3,10 @@ Spark
 """
 from typing import Any
 from properties import (
-    KAFKA_BOOTSTRAP_SERVERS, 
+    KAFKA_BOOTSTRAP_SERVERS,
     MYSQL_PASSWORD,
-    MYSQL_URL, 
-    MYSQL_USER, 
+    MYSQL_URL,
+    MYSQL_USER,
     spark_config_dict
 )
 from pyspark.sql import types as SparkDataTypeSchema
@@ -29,14 +29,18 @@ class SparkCongestionProcessor:
             SparkSession.builder
             .appName("CongestionSouelPreprocessing")
             .master("spark://compose-spark-master-1:7077")
-            .config(**spark_config_dict)
+            .config("spark.streaming.backpressure.enabled", "true")
+            .config("spark.jars.packages", "com.google.guava:guava:27.0-jre,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,mysql:mysql-connector-java:8.0.28,org.apache.hadoop:hadoop-aws:3.2.2") 
+            .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
+            .config("spark.streaming.stopGracefullyOnShutdown", "true")
+            .config("spark.streaming.kafka.consumer.config.auto.offset.reset", "latest")
+            .config("spark.executor.memory", "10g")
+            .config("spark.executor.cores", "4")
+            .config("spark.cores.max", "16")
+            .config("spark.sql.adaptive.enabled", "false")
             .getOrCreate()
         )
 
-        # AWS Credentials 설정
-        # spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.access.key", AWS_ACCESS_KEY_ID)
-        # spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.secret.key", AWS_SECRET_ACCESS_KEY)
-        # spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
         return spark
 
     def read_from_kafka(self, topic_list, schema) -> DataFrame:

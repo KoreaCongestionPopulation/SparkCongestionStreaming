@@ -8,7 +8,7 @@ services:
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_DIRECTORY=/bitnami/spark/data
     ports:
-      - '8080:8080'
+      - '8081:8081'
     networks:
       - spark-network
 
