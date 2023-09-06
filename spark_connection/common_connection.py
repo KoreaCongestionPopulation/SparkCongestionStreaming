@@ -27,16 +27,18 @@ class SparkCongestionProcessor:
         spark = (
             SparkSession.builder
             .appName("CongestionSouelPreprocessing")
-            .master("spark://compose-spark-master-1:7077")
+            # .master("spark://172.28.0.2:7077")
+            .master("local[*]")
             .config("spark.streaming.backpressure.enabled", "true")
             .config("spark.jars.packages", "com.google.guava:guava:27.0-jre,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,mysql:mysql-connector-java:8.0.28,org.apache.hadoop:hadoop-aws:3.2.2") 
-            .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
+            # .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
             .config("spark.streaming.stopGracefullyOnShutdown", "true")
             .config("spark.streaming.kafka.consumer.config.auto.offset.reset", "latest")
             .config("spark.executor.memory", "10g")
             .config("spark.executor.cores", "4")
             .config("spark.cores.max", "16")
             .config("spark.sql.adaptive.enabled", "false")
+            # .config("spark.kafka.consumer.cache.capacity", "")
             .getOrCreate()
         )
 
