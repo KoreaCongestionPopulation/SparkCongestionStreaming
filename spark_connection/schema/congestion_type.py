@@ -1,3 +1,7 @@
+"""
+Spark Type
+"""
+
 from pyspark.sql.types import (
     StructType,
     StructField,
@@ -9,7 +13,7 @@ from pyspark.sql.types import (
 )
 
 # -------------------------------------------------
-#        seoul congestion common schema         
+#        seoul congestion common schema
 # -------------------------------------------------
 
 common_schema = StructType([
@@ -23,7 +27,7 @@ common_schema = StructType([
 ])
 
 # ---------------------------------------------------
-#    seoul congestion fcst_yn register schema     
+#    seoul congestion fcst_yn register schema
 # ---------------------------------------------------ㅉ
 
 fcst_ppltn_schema = ArrayType(
@@ -42,7 +46,7 @@ fcst_yn = StructType([
     StructField("fcst_yn", fcst_yn_schema, True)
 ])
 # ------------------------------------------------------
-#    seoul congestion gender rate schema register    
+#    seoul congestion gender rate schema register
 # ------------------------------------------------------
 
 gender_rate_schema = StructField(
@@ -53,7 +57,7 @@ gender_rate_schema = StructField(
 )
 
 # ------------------------------------------------------
-#    seoul congestion age rate schema register       
+#    seoul congestion age rate schema register 
 # ------------------------------------------------------
 
 age_congestion_specific_schema = StructField(
@@ -70,7 +74,7 @@ age_congestion_specific_schema = StructField(
 )
 
 # -------------------------------------------------------------
-#    seoul congestion  schema register      
+#    seoul congestion  schema register
 # -------------------------------------------------------------
 
 n_fcst_yn = StructField("fcst_yn", StringType(), True)

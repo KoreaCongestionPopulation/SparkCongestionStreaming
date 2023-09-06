@@ -1,3 +1,7 @@
+"""
+토픽 리스트
+"""
+
 from properties import (
     DEVMKT_AGE,
     PALCULT_AGE,

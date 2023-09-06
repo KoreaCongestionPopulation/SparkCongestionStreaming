@@ -62,3 +62,17 @@ GENDER_CONGESTION_PRED: str = parser.get("KAFKA", "gender_congestion_pred")
 AWS_ACCESS_KEY_ID: str = parser.get("KAFKA", "AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY: str = parser.get("KAFKA", "AWS_SECRET_ACCESS_KEY")
 S3_LOCATION: str = parser.get("KAFKA", "S3_LOCATION")
+
+
+
+spark_config_dict = {
+    "spark.streaming.backpressure.enabled": "true",
+    "spark.jars.packages": "com.google.guava:guava:27.0-jre,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,mysql:mysql-connector-java:8.0.28,org.apache.hadoop:hadoop-aws:3.2.2",
+    "spark.hadoop.fs.s3a.aws.credentials.provider": "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider",
+    "spark.streaming.stopGracefullyOnShutdown": "true",
+    "spark.streaming.kafka.consumer.config.auto.offset.reset": "latest",
+    "spark.executor.memory": "10g",
+    "spark.executor.cores": "4",
+    "spark.cores.max": "16",
+    "spark.sql.adaptive.enabled": "false"
+}
