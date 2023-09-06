@@ -7,7 +7,6 @@ from properties import (
     MYSQL_PASSWORD,
     MYSQL_URL,
     MYSQL_USER,
-    spark_config_dict
 )
 from pyspark.sql import types as SparkDataTypeSchema
 from pyspark.sql import SparkSession, DataFrame
