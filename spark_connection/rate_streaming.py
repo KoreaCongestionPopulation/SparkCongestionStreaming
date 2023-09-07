@@ -45,8 +45,8 @@ n_age_query = SparkQuery(
     data_type=None
 )
 n_gender_query = SparkQuery(
-    with_temp_view=None, 
-    temp_view="congestion_gender", 
+    with_temp_view=None,
+    temp_view="congestion_gender",
     data_type=None
 )
 
