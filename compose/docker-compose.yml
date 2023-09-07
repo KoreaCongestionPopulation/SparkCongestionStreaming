@@ -11,6 +11,7 @@ services:
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_DIRECTORY=/bitnami/spark/data
     ports:
+      - "7077:7077"
       - '8081:8080' # 8081 외부 포트를 8080 내부 포트에 매핑
     networks:
       - spark-network
@@ -26,8 +27,9 @@ services:
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_MASTER_WEBUI_PORT=8081
       - SPARK_WORKER_CORES=4
-      - SPARK_WORKER_MEMORY=10g
+      - SPARK_WORKER_MEMORY=8g
       - SPARK_WORKER_WEBUI_PORT=8082
     ports:
       - "8082:8082"
@@ -42,8 +44,9 @@ services:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
       - SPARK_WORKER_CORES=4
-      - SPARK_WORKER_MEMORY=10g
-      - SPARK_WORKER_WEBUI_PORT=8083
+      - SPARK_WORKER_MEMORY=8g
+      - SPARK_MASTER_WEBUI_PORT=8081
+      - SPARK_WORKER_WEBUI_PORT=8084
     ports:
       - "8084:8084"
     depends_on:
@@ -58,7 +61,8 @@ services:
       - SPARK_MASTER_URL=spark://spark-master:7077
       - SPARK_WORKER_CORES=4
       - SPARK_WORKER_MEMORY=8g
-      - SPARK_WORKER_WEBUI_PORT=8084
+      - SPARK_MASTER_WEBUI_PORT=8081
+      - SPARK_WORKER_WEBUI_PORT=8085
     ports:
       - "8085:8085"
     depends_on:
@@ -66,21 +70,22 @@ services:
     networks:
       - spark-network
 
-  spark-worker-4:
-    image: bitnami/spark:3.3.0
-    environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_CORES=4
-      - SPARK_WORKER_MEMORY=8g
-      - SPARK_WORKER_WEBUI_PORT=8085
-    ports:
-      - "8086:8086"
-    depends_on:
-      - spark-master
-    networks:
-      - spark-network
-
+  # spark-worker-4:
+  #   image: bitnami/spark:3.3.0
+  #   environment:
+  #     - SPARK_MODE=worker
+  #     - SPARK_MASTER_URL=spark://spark-master:7077
+  #     - SPARK_WORKER_CORES=4
+  #     - SPARK_WORKER_MEMORY=8g
+  #     - SPARK_MASTER_WEBUI_PORT=8081
+  #     - SPARK_WORKER_WEBUI_PORT=8086
+  #   ports:
+  #     - "8086:8086"
+  #   depends_on:
+  #     - spark-master
+  #   networks:
+  #     - spark-network
+  
 networks:
   spark-network:
     external: false

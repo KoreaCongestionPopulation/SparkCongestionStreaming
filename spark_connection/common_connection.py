@@ -24,6 +24,7 @@ class SparkCongestionProcessor:
     @staticmethod
     def create_spark_session() -> SparkSession:
         """스파크 설정"""
+
         spark = (
             SparkSession.builder
             .appName("CongestionSouelPreprocessing")
@@ -34,7 +35,7 @@ class SparkCongestionProcessor:
             # .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
             .config("spark.streaming.stopGracefullyOnShutdown", "true")
             .config("spark.streaming.kafka.consumer.config.auto.offset.reset", "latest")
-            .config("spark.executor.memory", "10g")
+            .config("spark.executor.memory", "8g")
             .config("spark.executor.cores", "4")
             .config("spark.cores.max", "16")
             .config("spark.sql.adaptive.enabled", "false")
@@ -66,7 +67,7 @@ class SparkCongestionProcessor:
     def write_to_kafka(self, data_format: DataFrame, topic: str) -> StreamingQuery:
         """처리된 결과값 다시 카프카 토픽으로 보내기"""
         # checkpoint_dir = f"{S3_LOCATION}/connection/.checkpoint_{topic}"
-        checkpoint_dir = f"connection/.checkpoint_{topic}"
+        checkpoint_dir = f"/connection/.checkpoint_{topic}"
         
         return (
             data_format.writeStream
@@ -83,7 +84,7 @@ class SparkCongestionProcessor:
     def write_to_mysql(self, data_format: DataFrame, table_name: str) -> StreamingQuery:
         """마이크로 배치고 mysql 적재하기"""
         # checkpoint_dir = f"{S3_LOCATION}/connection/.checkpoint_{table_name}"
-        checkpoint_dir = f"connection/.checkpoint_{table_name}"
+        checkpoint_dir = f"/connection/.checkpoint_{table_name}"
 
         def write_batch_to_mysql(batch_df: Any, batch_id) -> None:
             """JDBC template 사용"""
