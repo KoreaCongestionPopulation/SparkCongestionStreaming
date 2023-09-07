@@ -3,8 +3,6 @@ services:
   spark-master:
     image: bitnami/spark:3.3.0
     container_name: spark-master
-    volumes:
-      - ./logs:/bitnami/spark/logs
     environment:
       - SPARK_MODE=master
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
@@ -70,21 +68,21 @@ services:
     networks:
       - spark-network
 
-  # spark-worker-4:
-  #   image: bitnami/spark:3.3.0
-  #   environment:
-  #     - SPARK_MODE=worker
-  #     - SPARK_MASTER_URL=spark://spark-master:7077
-  #     - SPARK_WORKER_CORES=4
-  #     - SPARK_WORKER_MEMORY=8g
-  #     - SPARK_MASTER_WEBUI_PORT=8081
-  #     - SPARK_WORKER_WEBUI_PORT=8086
-  #   ports:
-  #     - "8086:8086"
-  #   depends_on:
-  #     - spark-master
-  #   networks:
-  #     - spark-network
+  spark-worker-4:
+    image: bitnami/spark:3.3.0
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_CORES=4
+      - SPARK_WORKER_MEMORY=8g
+      - SPARK_MASTER_WEBUI_PORT=8081
+      - SPARK_WORKER_WEBUI_PORT=8086
+    ports:
+      - "8086:8086"
+    depends_on:
+      - spark-master
+    networks:
+      - spark-network
   
 networks:
   spark-network:
