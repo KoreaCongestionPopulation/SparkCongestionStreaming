@@ -16,8 +16,9 @@ from pyspark.sql.functions import col, from_json, to_json, struct
 
 class SparkCongestionProcessor:
     """
-    스파크 실시간 인구 혼잡도 평균 쿼리 계산 
+    스파크 실시간 인구 혼잡도 평균 쿼리 계산
     """
+
     def __init__(self):
         self.spark = self.create_spark_session()
 
@@ -26,12 +27,14 @@ class SparkCongestionProcessor:
         """스파크 설정"""
 
         spark = (
-            SparkSession.builder
-            .appName("CongestionSouelPreprocessing")
-            .master("spark://spark-master:7077")
-            # .master("local[*]")
+            SparkSession.builder.appName("CongestionSouelPreprocessing")
+            # .master("spark://spark-master:7077")
+            .master("local[*]")
             .config("spark.streaming.backpressure.enabled", "true")
-            .config("spark.jars.packages", "com.google.guava:guava:27.0-jre,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,mysql:mysql-connector-java:8.0.28,org.apache.hadoop:hadoop-aws:3.2.2") 
+            .config(
+                "spark.jars.packages",
+                "com.google.guava:guava:27.0-jre,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0,mysql:mysql-connector-java:8.0.28,org.apache.hadoop:hadoop-aws:3.2.2",
+            )
             # .config('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider')
             .config("spark.streaming.stopGracefullyOnShutdown", "true")
             .config("spark.streaming.kafka.consumer.config.auto.offset.reset", "latest")
@@ -48,16 +51,14 @@ class SparkCongestionProcessor:
     def read_from_kafka(self, topic_list, schema) -> DataFrame:
         """카프카 연결 및 wateramark 설정"""
         kafka_stream = (
-            self.spark.readStream
-            .format("kafka")
+            self.spark.readStream.format("kafka")
             .option("kafka.bootstrap.servers", f"{KAFKA_BOOTSTRAP_SERVERS}")
             .option("subscribe", ",".join(topic_list))
             .load()
         )
 
         return (
-            kafka_stream
-            .selectExpr("CAST(key as STRING)", "CAST(value as STRING)")
+            kafka_stream.selectExpr("CAST(key as STRING)", "CAST(value as STRING)")
             .select(from_json(col("value"), schema=schema).alias("congestion"))
             .select("congestion.*")
             .withColumn("ppltn_time", col("ppltn_time").cast("timestamp"))
@@ -68,16 +69,18 @@ class SparkCongestionProcessor:
         """처리된 결과값 다시 카프카 토픽으로 보내기"""
         # checkpoint_dir = f"{S3_LOCATION}/connection/.checkpoint_{topic}"
         checkpoint_dir = f"/connection/.checkpoint_{topic}"
-        
+
         return (
-            data_format.writeStream
-            .outputMode("update")
+            data_format.writeStream.outputMode("update")
             .format("kafka")
             .option("kafka.bootstrap.servers", f"{KAFKA_BOOTSTRAP_SERVERS}")
             .option("topic", topic)
             .option("checkpointLocation", checkpoint_dir)
             .option("startingOffsets", "earliest")
-            .option("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+            .option(
+                "value.serializer",
+                "org.apache.kafka.common.serialization.StringSerializer",
+            )
             .start()
         )
 
@@ -88,25 +91,24 @@ class SparkCongestionProcessor:
 
         def write_batch_to_mysql(batch_df: Any, batch_id) -> None:
             """JDBC template 사용"""
-            batch_df.write \
-                .format("jdbc") \
-                .option("url", MYSQL_URL) \
-                .option("driver", "com.mysql.cj.jdbc.Driver") \
-                .option("dbtable", table_name) \
-                .option("user", MYSQL_USER) \
-                .option("password", MYSQL_PASSWORD) \
-                .mode("append") \
+            (
+                batch_df.write.format("jdbc")
+                .option("url", MYSQL_URL)
+                .option("driver", "com.mysql.cj.jdbc.Driver")
+                .option("dbtable", table_name)
+                .option("user", MYSQL_USER)
+                .option("password", MYSQL_PASSWORD)
+                .mode("append")
                 .save()
-                
+            )
+
         return (
-            data_format.writeStream
-            .outputMode("update")
+            data_format.writeStream.outputMode("update")
             .foreachBatch(write_batch_to_mysql)
             .option("checkpointLocation", checkpoint_dir)
-            .trigger(processingTime ='1 minutes')
+            .trigger(processingTime="1 minutes")
             .start()
         )
-
 
     def process(
         self,
@@ -115,10 +117,10 @@ class SparkCongestionProcessor:
         temp_view: str,
         sql_expression: str,
         retrieve_topic: str,
-        mysql_table_name: str
+        mysql_table_name: str,
     ) -> None:
         """
-        최종으로 모든 처리 프로세스를 처리하는 프로세스 함수 시작점 
+        최종으로 모든 처리 프로세스를 처리하는 프로세스 함수 시작점
 
 
         Args:
@@ -127,7 +129,7 @@ class SparkCongestionProcessor:
             temp_view (str): with절 SQL
             sql_expression (str): SQL절
             retrieve_topic (str): 처리한 결과값을 다시 카프카로 보낼 토픽 이름
-            mysql_table_name (str): mysql 테이블 
+            mysql_table_name (str): mysql 테이블
         """
         try:
             congestion_df = self.read_from_kafka(topic_list, schema)

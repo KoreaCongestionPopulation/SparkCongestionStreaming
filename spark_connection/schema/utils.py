@@ -1,14 +1,16 @@
 """쿼리 모음집"""
 
+
 class SparkStreamingQueryOrganization:
     """
-    Spark 동적 쿼리 모음집 
+    Spark 동적 쿼리 모음집
     """
+
     def __init__(self, with_temp_view: str, temp_view: str, data_type: str) -> None:
         self.with_temp_view = with_temp_view
         self.temp_view = temp_view
         self.data_type = data_type
-        
+
         self.fcst_yn_rate = """
             AVG(fcst_data.fcst_congest_lvl) AS avg_fcst_congest_lvl,
             AVG(fcst_data.fcst_ppltn_min) AS avg_fcst_ppltn_min,
@@ -48,13 +50,13 @@ class SparkStreamingQueryOrganization:
     def sql_for_congestion(self, temp_view: str, fields: str) -> str:
         """
         congestion 데이터를 위한 SQL 쿼리를 생성
-        
+
         :param fields: 집계하거나 선택할 추가 필드
         :return: 생성된 SQL 문자열.
         """
         if not fields:
             raise ValueError("Fields는 비워둘 수 없습니다.")
-  
+
         return f"""
         SELECT 
             cg.category,
@@ -81,15 +83,17 @@ class SparkStreamingQueryOrganization:
     def n_age_rate_query(self) -> str:
         """나이대별 혼잡도"""
         return self.sql_for_congestion("congestion_age", self.age_rate)
- 
+
     def y_age_rate_query(self, query_type: str) -> str:
         """예측값이 존재하는 쿼리 혼잡도"""
         if query_type == "age_rate":
-            data = self.fcst_yn_rate + self.age_rate
+            data: str = self.fcst_yn_rate + self.age_rate
         elif query_type == "gender_rate":
-            data = self.fcst_yn_rate + self.gender_rate
+            data: str = self.fcst_yn_rate + self.gender_rate
         else:
             raise ValueError(f"선택한 : {query_type}의 적절한 쿼리문이 존재하지 않습니다")
 
-        main_query = self.sql_for_congestion(temp_view=self.with_temp_view, fields=data)
+        main_query: str = self.sql_for_congestion(
+            temp_view=self.with_temp_view, fields=data
+        )
         return self.with_data_congestion + main_query
