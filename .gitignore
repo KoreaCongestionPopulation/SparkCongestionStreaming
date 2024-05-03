@@ -164,3 +164,4 @@ test.py
 connection_db.py
 
 .checkpoint_*
+.DS_Store
